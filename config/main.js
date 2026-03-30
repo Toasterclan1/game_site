@@ -43,30 +43,32 @@ function displayFilteredGames(filteredGames) {
 
 
 function handleSearchInput() {
-  const searchInputValue = document
-    .getElementById("searchInput")
-    .value.toLowerCase();
+  const searchInput = document.getElementById("searchInput");
+  if (!searchInput) return;
+
+  const searchInputValue = searchInput.value.toLowerCase();
   const filteredGames = gamesData.filter((game) =>
     game.name.toLowerCase().includes(searchInputValue)
   );
   displayFilteredGames(filteredGames);
 }
 
+function initialize() {
+  const titleEl = document.getElementById("title");
+  const subtitleEl = document.getElementById("subtitle");
+  const searchInput = document.getElementById("searchInput");
 
-fetch("./config/games.json") 
-  .then((response) => response.json())
-  .then((data) => {
-    gamesData = data;
-    displayFilteredGames(data); 
-  })
-  .catch((error) => console.error("Error fetching games:", error));
+  if (titleEl) titleEl.textContent = sitename;
+  if (subtitleEl) subtitleEl.textContent = subtext;
+  if (searchInput) searchInput.addEventListener("input", handleSearchInput);
 
+  fetch("./config/games.json")
+    .then((response) => response.json())
+    .then((data) => {
+      gamesData = data;
+      displayFilteredGames(data);
+    })
+    .catch((error) => console.error("Error fetching games:", error));
+}
 
-document
-  .getElementById("searchInput")
-  .addEventListener("input", handleSearchInput);
-
-document.getElementById("title").innerHTML = `${sitename}`;
-
-document.getElementById("subtitle").innerHTML = `${subtext}`
-
+document.addEventListener("DOMContentLoaded", initialize);
