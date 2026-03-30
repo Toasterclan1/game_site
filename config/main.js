@@ -60,7 +60,15 @@ function initialize() {
 
   if (titleEl) titleEl.textContent = sitename;
   if (subtitleEl) subtitleEl.textContent = subtext;
-  if (searchInput) searchInput.addEventListener("input", handleSearchInput);
+  if (searchInput) {
+    searchInput.addEventListener("input", handleSearchInput);
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleSearchInput();
+      }
+    });
+  }
 
   fetch("./config/games.json")
     .then((response) => response.json())
